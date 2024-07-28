@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load core_tags %}
+
+{% block subtitle %}
+    Events
+{% endblock %}
+
+{% block page_heading %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="text-right">
+                <a href="/admin/lucky_draw/event/add/" class="btn btn-primary">
+                    <i class="fa fa-plus"></i> Add Event
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <form method="get">
+                <div class="input-group mb-3">
+                    {{ filter_form }}
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        <a class="btn btn-danger" href="{% url 'admins:event-list' %}">
+                            <i class="fa fa-paint-brush"></i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    {% if object_list %}
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-hover">
+                                <thead class="border-bottom">
+                                <tr>
+                                    <th><h6><i class="mdi mdi-tent"></i> Name</h6></th>
+                                    <th><h6><i class="mdi mdi-library"></i> Type</h6></th>
+                                    <th><h6><i class="mdi mdi-nature-people"></i> Participants</h6></th>
+                                    <th><h6><i class="mdi mdi-check"></i> Status</h6></th>
+                                    <th><h6><i class="bx bx-bell bx-tada"></i> Spurned On</h6></th>
+                                    <th><h6>-</h6></th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+
+                                {% for object in object_list %}
+                                    <tr>
+                                        <td>
+                                            <b>{{ object.name }}</b><br>
+                                            {{ object.created_on.date }}
+                                        </td>
+                                        <td>
+                                            <b class="text-danger">{{ object.get_event_type_display }}</b>
+                                        </td>
+                                        <td><h5>{{ object.participant_set.count }}</h5></td>
+                                        <td><h5>{{ object.get_status_display }}</h5></td>
+                                        <td>
+                                            {{ object.spun_on.date }}<br>
+                                            {{ object.spun_on.time }}
+                                        </td>
+                                        <td>
+                                            <b>
+                                                <a href="{% url 'admins:event-detail' object.id %}">
+                                                    <i class="fa fa-eye"></i> view
+                                                </a>
+                                            </b>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-danger mb-0">
+                            <b>No events available yet.</b>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if object_list %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mt-4">
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li>
+                            <span>
+                                <a href="{% relative_url page_obj.previous_page_number 'page' request.GET.urlencode %}">
+                                    Previous
+                                </a>
+                            </span>
+                            </li>
+                        {% endif %}
+                        <li class="">
+                            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+                        </li>
+                        {% if page_obj.has_next %}
+                            <li>
+                            <span>
+                                <a href="{% relative_url page_obj.next_page_number 'page' request.GET.urlencode %}">
+                                    Next
+                                </a>
+                            </span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block js_code %}
+    <script>
+        $(document).ready(function () {
+
+            $('label').hide();
+            $('input').addClass('form-control');
+            $('select').addClass('form-control');
+            $("#id_event_type option:first-child").text("-- event type --");
+            $("#id_status option:first-child").text("-- status --");
+
+        });
+    </script>
+{% endblock %}
+
+
