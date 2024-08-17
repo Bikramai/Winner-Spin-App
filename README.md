@@ -60,6 +60,6 @@ py manage.py runserver
 
 
 <h4>ALERT !</h4>
-<p>Application is developed by <a href="https://github.com/IkramKhan-DevOps/">MARK I</a> at <b><a href="https://exarth.com">Exarth</a></b>.
+<p>Application is developed by <a href="https://github.com/Bikramai/">Ikram</a> at <b><a href="https://exarth.com">Exarth</a></b>.
 <small style="color: indianred">( NDA protected )</small>
 </p>
